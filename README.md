@@ -5,6 +5,12 @@ Hey there! Welcome to **ArcheryVR**, a simple VR archery game I built while lear
 ## 🌟 About the Project
 ArcheryVR is a super basic VR game where you can grab a bow, shoot arrows, and try to hit a target that’s placed on moving platforms. The closer you hit to the center of the target, the more points you get! The platforms move randomly to make things a bit harder, and there’s a score UI to keep track of your points. I built this project to learn the fundamentals of VR in Unity, so it’s nothing fancy—just a fun experiment while I figure things out.
 
+## 🛠️ Tech Stack  
+
+- **Engine:** Unity - 2022.3.55f1
+- **Dependency:** XR Interaction Toolkit
+- **VR Platform:** Oculus Quest 2
+
 ## Gameplay Preview
 Here’s a quick look at what the game looks like:
 
