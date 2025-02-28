@@ -8,8 +8,8 @@ ArcheryVR is a super basic VR game where you can grab a bow, shoot arrows, and t
 ## 🛠️ Tech Stack  
 
 - **Engine:** Unity - 2022.3.55f1
-- **Dependency:** XR Interaction Toolkit
-- **VR Platform:** Oculus Quest 2
+- **Dependency:**  XR Interaction Toolkit
+- **VR Platform:**  Oculus Quest 2
 
 ## Gameplay Preview
 Here’s a quick look at what the game looks like:
