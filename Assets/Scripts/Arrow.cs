@@ -5,9 +5,10 @@ public class Arrow : MonoBehaviour
 {
     public float speed = 10f;
     public Transform tip;
-    public AudioClip hitSoundClip;
+    public AudioClip hitSound;
+    public GameObject scorePopup;
 
-    private Rigidbody _rigidbody;
+    private Rigidbody _rb;
     private bool _inAir = false;
     private Vector3 _lastPosition = Vector3.zero;
     private ParticleSystem _particleSystem;
@@ -16,11 +17,11 @@ public class Arrow : MonoBehaviour
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
         _particleSystem = GetComponentInChildren<ParticleSystem>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _hitSound = gameObject.AddComponent<AudioSource>();
-        _hitSound.clip = hitSoundClip;
+        _hitSound.clip = hitSound;
         PullInteraction.PullActionReleased += Release;
 
         Stop();
@@ -39,7 +40,7 @@ public class Arrow : MonoBehaviour
         SetPhysics(true);
 
         Vector3 force = transform.forward * value * speed;
-        _rigidbody.AddForce(force, ForceMode.Impulse);
+        _rb.AddForce(force, ForceMode.Impulse);
 
         StartCoroutine(RotateWithVelocity());
 
@@ -53,7 +54,7 @@ public class Arrow : MonoBehaviour
         yield return new WaitForFixedUpdate();
         while (_inAir)
         {
-            Quaternion newRotation = Quaternion.LookRotation(_rigidbody.velocity, transform.up);
+            Quaternion newRotation = Quaternion.LookRotation(_rb.velocity, transform.up);
             transform.rotation = newRotation;
             yield return null;
         }
@@ -79,12 +80,18 @@ public class Arrow : MonoBehaviour
                     float distanceFromCenter = Vector3.Distance(hitInfo.point, hitInfo.transform.position);
                     int points = CalculatePoints(distanceFromCenter);
                     ScoreManager.Instance.AddScore(points);
+
+                    Vector3 popupPosition = hitInfo.transform.position + Vector3.up * 0.5f;
+                    GameObject popup = Instantiate(this.scorePopup, popupPosition, Quaternion.identity);
+                    ScorePopup scorePopup = popup.GetComponent<ScorePopup>();
+                    scorePopup.SetScore(points);
+
                     StartCoroutine(PlayHitSoundAndDestroy());
                 }
                 else
                 {
                     Stop();
-                    Destroy(gameObject); // Destroy immediately if not hitting the target
+                    Destroy(gameObject);
                 }
             }
         }
@@ -107,8 +114,8 @@ public class Arrow : MonoBehaviour
 
     private void SetPhysics(bool usePhysics)
     {
-        _rigidbody.useGravity = usePhysics;
-        _rigidbody.isKinematic = !usePhysics;
+        _rb.useGravity = usePhysics;
+        _rb.isKinematic = !usePhysics;
     }
 
     private IEnumerator PlayHitSoundAndDestroy()
